@@ -5,120 +5,111 @@ BEGIN;
 
 CREATE TABLE public.employer_verification
 (
-    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 1000000000 CACHE 1 ),
-    employer_id integer NOT NULL,
-    personnel_verification boolean NOT NULL,
+    id smallint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 32767 CACHE 1 ),
+    employer_id smallint NOT NULL,
+    employer_verification boolean NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE public.employers
 (
-    user_id integer NOT NULL,
-    company_name text NOT NULL,
-    website text NOT NULL,
-    phone text NOT NULL,
+    user_id smallint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 32767 CACHE 1 ),
+    company_name character varying(100) NOT NULL,
+    website character varying(100) NOT NULL,
+    phone character varying(20) NOT NULL,
     PRIMARY KEY (user_id)
 );
 
 CREATE TABLE public.job_positions
 (
-    id integer NOT NULL,
-    "position" character varying(255),
-    position_id integer NOT NULL,
-    position_name character varying(255),
+    id smallint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 32767 CACHE 1 ),
+    job_position character varying(50) NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE public.job_seeker_verification
 (
-    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 1000000000 CACHE 1 ),
-    job_seeker_id integer NOT NULL,
+    id smallint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 32767 CACHE 1 ),
+    job_seeker_id smallint NOT NULL,
     mernis_verification boolean NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE public.job_seekers
 (
-    user_id integer NOT NULL,
-    name character varying(50) NOT NULL,
-    surname character varying(50) NOT NULL,
+    user_id smallint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 32767 CACHE 1 ),
+    first_name character varying(50) NOT NULL,
+    last_name character varying(50) NOT NULL,
     identification_number character varying(11) NOT NULL,
-    year_of_birth date NOT NULL,
+    date_of_birth character varying(15) NOT NULL,
     PRIMARY KEY (user_id)
-);
-
-CREATE TABLE public.jobpositions
-(
-    position_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 100000000 CACHE 1 ),
-    position_name character varying(50) NOT NULL,
-    PRIMARY KEY (position_id)
 );
 
 CREATE TABLE public.system_personnel
 (
-    user_id integer NOT NULL,
-    name character varying(50) NOT NULL,
-    surname character varying(50) NOT NULL,
-    PRIMARY KEY (user_id)
+    userid smallint NOT NULL,
+    first_name character varying(50) NOT NULL,
+    last_name character varying(50),
+    PRIMARY KEY (userid)
 );
 
 CREATE TABLE public.user_verification
 (
-    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 1000000000 CACHE 1 ),
-    user_id integer NOT NULL,
+    id smallint NOT NULL,
+    user_id smallint NOT NULL,
     email_verification boolean NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE public.users
 (
-    id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 1000000000 CACHE 1 ),
-    user_id integer NOT NULL,
-    position_id integer NOT NULL,
-    email text NOT NULL,
-    password text NOT NULL,
+    id smallint NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 32767 CACHE 1 ),
+    userno character varying(10) NOT NULL,
+    position_id smallint NOT NULL,
+    email character varying(50) NOT NULL,
+    password character varying(50) NOT NULL,
     PRIMARY KEY (id)
 );
 
+ALTER TABLE public.employer_verification
+    ADD FOREIGN KEY (employer_id)
+    REFERENCES public.employers (user_id)
+    NOT VALID;
+
+
 ALTER TABLE public.employers
     ADD FOREIGN KEY (user_id)
-    REFERENCES public.employer_verification (employer_id)
+    REFERENCES public.users (id)
+    NOT VALID;
+
+
+ALTER TABLE public.job_seeker_verification
+    ADD FOREIGN KEY (job_seeker_id)
+    REFERENCES public.job_seekers (user_id)
     NOT VALID;
 
 
 ALTER TABLE public.job_seekers
     ADD FOREIGN KEY (user_id)
-    REFERENCES public.job_seeker_verification (job_seeker_id)
+    REFERENCES public.users (id)
     NOT VALID;
 
 
-ALTER TABLE public.users
+ALTER TABLE public.system_personnel
+    ADD FOREIGN KEY (userid)
+    REFERENCES public.users (id)
+    NOT VALID;
+
+
+ALTER TABLE public.user_verification
     ADD FOREIGN KEY (id)
-    REFERENCES public.employers (user_id)
+    REFERENCES public.users (id)
     NOT VALID;
 
 
 ALTER TABLE public.users
     ADD FOREIGN KEY (position_id)
-    REFERENCES public.jobpositions (position_id)
-    NOT VALID;
-
-
-ALTER TABLE public.users
-    ADD FOREIGN KEY (id)
-    REFERENCES public.job_seekers (user_id)
-    NOT VALID;
-
-
-ALTER TABLE public.users
-    ADD FOREIGN KEY (id)
-    REFERENCES public.system_personnel (user_id)
-    NOT VALID;
-
-
-ALTER TABLE public.users
-    ADD FOREIGN KEY (id)
-    REFERENCES public.user_verification (user_id)
+    REFERENCES public.job_positions (id)
     NOT VALID;
 
 END;
