@@ -12,21 +12,13 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @Data
 @Entity
-@Table(name = "candidates")
+@Table(name = "employees")
 @AllArgsConstructor
 @NoArgsConstructor
-public class JobSeeker extends User {
-
+public class Employee extends User{
 	@Column(name = "first_name")
 	private String firstName;
 
 	@Column(name = "last_name")
 	private String lastName;
-
-	@Column(name = "identity_number")
-	private String identificationNumber;
-
-	@Column(name = "birth_year")
-	private int dateOfBirth;
-
 }

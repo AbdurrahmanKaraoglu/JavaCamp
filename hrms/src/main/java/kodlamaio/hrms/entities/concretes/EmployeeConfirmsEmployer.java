@@ -6,23 +6,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "job_titles")
+@Table(name = "employee_confirms_employers")
 @AllArgsConstructor
 @NoArgsConstructor
-public class JobPosition {
+public class EmployeeConfirmsEmployer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private int id;
 
-	@Column(name = "title")
-	@NotNull
-	private String title;
+	@Column(name = "employer_id")
+	private int employerId;
 }
