@@ -13,7 +13,7 @@ import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.dataAccess.abstracts.UserDao;
 import kodlamaio.hrms.dataAccess.abstracts.VerificationCodeDao;
 import kodlamaio.hrms.entities.abstracts.User;
-import kodlamaio.hrms.entities.abstracts.VerificationCode;
+import kodlamaio.hrms.entities.concretes.VerificationCode;
 
 @Service
 public class VerificationCodeManager implements VerificationCodeService {
