@@ -2,12 +2,9 @@ package kodlamaio.hrms.business.concretes;
 
 import java.util.List;
 import java.util.regex.Pattern;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.google.common.base.Strings;
-
 import kodlamaio.hrms.business.abstracts.EmployerService;
 import kodlamaio.hrms.business.abstracts.VerificationCodeService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
@@ -17,32 +14,28 @@ import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
 import kodlamaio.hrms.core.utilities.results.SuccessResult;
 import kodlamaio.hrms.core.validations.EmployerValidator;
 import kodlamaio.hrms.dataAccess.abstracts.EmployerDao;
-import kodlamaio.hrms.dataAccess.abstracts.UserDao;
 import kodlamaio.hrms.entities.abstracts.User;
 import kodlamaio.hrms.entities.concretes.Employer;
 
-@Service // 5 -- Bu class projede servis görevi görecek
+@Service
 public class EmployerManager implements EmployerService {
 
-	// Birden fazla olabilir.
-	private EmployerDao employerDao; // 2 -- Veri tabanına erişmek için
-	private UserDao userDao;
+	private EmployerDao employerDao;
 	private VerificationCodeService verificationCodeService;
 
-	@Autowired // 3 -- Bağımlılık oluşturur.
-	public EmployerManager(EmployerDao employerDao, UserDao userDao, VerificationCodeService verificationCodeService) { // 4
+	@Autowired
+	public EmployerManager(EmployerDao employerDao, VerificationCodeService verificationCodeService) { // 4
 		super();
 		this.employerDao = employerDao;
-		this.userDao = userDao;
 		this.verificationCodeService = verificationCodeService;
 	}
 
-	@Override // 1
+	@Override
 	public DataResult<List<Employer>> getAll() {
 		return new SuccessDataResult<List<Employer>>(this.employerDao.findAll(), "Data Listelendi");
 	}
 
-	@Override // 1
+	@Override
 	public Result add(Employer employer) {
 		if (Strings.isNullOrEmpty(employer.getCompanyName())) {
 			return new ErrorResult("Lütfen Firma İsmini Giriniz!!!");

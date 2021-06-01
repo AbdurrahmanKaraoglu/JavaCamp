@@ -1,11 +1,14 @@
 package kodlamaio.hrms.entities.concretes;
 
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,6 +18,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "cities")
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class Citie {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,4 +27,9 @@ public class Citie {
 
 	@Column(name = "city_name")
 	private String cityName;
+
+	@OneToMany(mappedBy = "citie")
+	@JsonIgnore
+	private List<JobPostingForm> jobPostingForms;
+
 }

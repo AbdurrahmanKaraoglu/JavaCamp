@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,9 +17,10 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @Table(name = "verification_codes")
-@Inheritance(strategy = InheritanceType.JOINED)
 @AllArgsConstructor
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
+
 public class VerificationCode {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +34,6 @@ public class VerificationCode {
 	private boolean isVerified;
 
 	@Column(name = "verified_date")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate verifiedDate;
 }

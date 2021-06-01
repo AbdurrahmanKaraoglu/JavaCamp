@@ -8,5 +8,6 @@ import kodlamaio.hrms.entities.concretes.EmployeeConfirm;
 
 public interface EmployeeConfirmService {
 	DataResult<List<EmployeeConfirm>> getAll();
+
 	Result add(EmployeeConfirm employeeConfirm);
 }
