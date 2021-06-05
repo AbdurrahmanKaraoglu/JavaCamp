@@ -16,38 +16,33 @@ import kodlamaio.hrms.core.validations.EmployerValidator;
 import kodlamaio.hrms.dataAccess.abstracts.EmployerDao;
 import kodlamaio.hrms.entities.abstracts.User;
 import kodlamaio.hrms.entities.concretes.Employer;
+import kodlamaio.hrms.dataAccess.abstracts.UserDao;
 
-@Service
+@Service // 5 -- Bu class projede servis görevi görecek
 public class EmployerManager implements EmployerService {
 
-	private EmployerDao employerDao;
+	// Birden fazla olabilir.
+	private EmployerDao employerDao; // 2 -- Veri tabanına erişmek için
+	private UserDao userDao;
 	private VerificationCodeService verificationCodeService;
 
-	@Autowired
-	public EmployerManager(EmployerDao employerDao, VerificationCodeService verificationCodeService) { // 4
+	@Autowired // 3 -- Bağımlılık oluşturur.
+	public EmployerManager(EmployerDao employerDao, UserDao userDao, VerificationCodeService verificationCodeService) { // 4
 		super();
 		this.employerDao = employerDao;
+		this.userDao = userDao;
 		this.verificationCodeService = verificationCodeService;
 	}
 
-	@Override
+	@Override // 1
 	public DataResult<List<Employer>> getAll() {
 		return new SuccessDataResult<List<Employer>>(this.employerDao.findAll(), "Data Listelendi");
 	}
 
-	@Override
+	@Override // 1
 	public Result add(Employer employer) {
-		if (Strings.isNullOrEmpty(employer.getCompanyName())) {
-			return new ErrorResult("Lütfen Firma İsmini Giriniz!!!");
-		} else if (Strings.isNullOrEmpty(employer.getWebAddress())) {
-			return new ErrorResult("Lütfen Web Adresini  Giriniz!!!");
-		} else if (Strings.isNullOrEmpty(employer.getPhoneNumber())) {
-			return new ErrorResult("Lütfen Telefon Numarasını Giriniz!!!");
-		} else if (Strings.isNullOrEmpty(employer.getEmail())) {
-			return new ErrorResult("Lütfen Email i Giriniz!!!");
-		} else if (Strings.isNullOrEmpty(employer.getPassword()) && employer.getPassword().length() <= 6) {
-			return new ErrorResult("Lütfen Şifrenizi 6 Karakterden Az  Girmeyiniz!!!");
-		} else if (getByEmail(employer.getEmail()).getData() != null) {
+
+		if (getByEmail(employer.getEmail()).getData() != null) {
 			return new ErrorResult(employer.getEmail() + " E-Posta Adresinden Daha Önceden Bir Kayıt Var.");
 		} else if (!EmployerValidator.EmployerDomainCheck(employer)) {
 			return new ErrorResult("Eşleşmeyen Domain adreis ile eposta adresi");

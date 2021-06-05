@@ -18,7 +18,7 @@ public interface JobPostingFormDao extends JpaRepository<JobPostingForm, Integer
 	@Query("Select new kodlamaio.hrms.entities.dtos.JobPostingFormWithEmployerWithJobPositionDto"
 			+ "(e.companyName , p.title , jpf.numberOfOpenPositions, jpf.releaseDate, jpf.applicationDeadline) "
 			+ "From JobPostingForm jpf Inner Join jpf.employer e Inner Join jpf.jobPosition p where jpf.formActive = true")
-	List<JobPostingFormWithEmployerWithJobPositionDto> getByFormActiveTrue();
+	List<JobPostingFormWithEmployerWithJobPositionDto> getByFormActiveTrue(); // sorgu kullanılacak
 
 	@Query("Select new kodlamaio.hrms.entities.dtos.JobPostingFormWithEmployerWithJobPositionDto"
 			+ "(e.companyName , p.title , jpf.numberOfOpenPositions, jpf.releaseDate, jpf.applicationDeadline) "

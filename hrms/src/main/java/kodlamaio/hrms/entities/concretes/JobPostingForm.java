@@ -3,6 +3,7 @@ package kodlamaio.hrms.entities.concretes;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +14,10 @@ import javax.validation.constraints.NotBlank;
 
 import com.sun.istack.NotNull;
 
+import kodlamaio.hrms.entities.concretes.Citie;
+import kodlamaio.hrms.entities.concretes.Employer;
+import kodlamaio.hrms.entities.concretes.JobPosition;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
@@ -21,7 +26,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "job_posting_form")
+@Table(name = "job_posting_forms")
 @AllArgsConstructor
 @NoArgsConstructor
 
@@ -31,10 +36,19 @@ public class JobPostingForm {
 	@Column(name = "id")
 	private int id;
 
-	@Column(name = "job_description", nullable = false)
-	@NotBlank
+	// @Column(name = "employer_id")
+	// private int employerId;
+
+	// @Column(name = "job_position_id")
+	// private int jobPositionId;
+
+	@Column(name = "job_description")
+	@NotBlank(message="İş Açıklaması Boş Geçilemez")
 	@NotNull
 	private String jobDescription;
+
+	// @Column(name = "city_id")
+	// private int cityId;
 
 	@Column(name = "minimum_salary")
 	private int minimumSalary;
@@ -42,42 +56,38 @@ public class JobPostingForm {
 	@Column(name = "maximum_salary")
 	private int maximumSalary;
 
-	@Column(name = "number_of_open_positions", nullable = false)
-	@NotBlank
+	@Column(name = "number_of_open_positions")
+	@NotBlank(message="Açık Pozisyon Sayısı Boş Geçilemez")
 	@NotNull
 	private int numberOfOpenPositions;
 
-	@Column(name = "release_date", nullable = false)
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	@NotBlank
+	@Column(name = "release_date")
+	@NotBlank(message="Yayınlama Tarihi Boş Geçilemez")
 	@NotNull
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate releaseDate;
 
-	@Column(name = "application_deadline", nullable = false)
+	@Column(name = "application_deadline")
+	@NotBlank(message="Son Başvuru Tarihi Boş Geçilemez")
+	@NotNull
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate applicationDeadline;
 
 	@Column(name = "active")
-	@NotBlank
-	@NotNull
+	//@NotBlank(message="Boş Geçilemez")
+	//@NotNull
 	private boolean formActive;
 
-	@ManyToOne()
-	@JoinColumn(name = "employer_id")
-	@NotBlank
-	@NotNull
+	@ManyToOne(targetEntity = Employer.class ,fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "employer_id" , referencedColumnName =  "id" ,nullable = false)
 	private Employer employer;
 
-	@ManyToOne()
-	@JoinColumn(name = "city_id")
-	@NotBlank
-	@NotNull
+	@ManyToOne(targetEntity = Citie.class ,fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "city_id",referencedColumnName =  "id" ,nullable = false)
 	private Citie citie;
 
-	@ManyToOne
-	@JoinColumn(name = "job_position_id")
-	@NotBlank
-	@NotNull
+	@ManyToOne(targetEntity = JobPosition.class ,fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "job_position_id",referencedColumnName =  "id" ,nullable = false)
 	private JobPosition jobPosition;
 
 }

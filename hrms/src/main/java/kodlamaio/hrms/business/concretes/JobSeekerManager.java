@@ -2,9 +2,11 @@ package kodlamaio.hrms.business.concretes;
 
 import java.util.List;
 import java.util.regex.Pattern;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.common.base.Strings;
 import kodlamaio.hrms.business.abstracts.FakeEmailVerificationService;
+import kodlamaio.hrms.business.abstracts.JobSeekerCheckService;
 import kodlamaio.hrms.business.abstracts.JobSeekerService;
 import kodlamaio.hrms.business.abstracts.MernisDemoService;
 import kodlamaio.hrms.business.abstracts.VerificationCodeService;
@@ -25,15 +27,19 @@ public class JobSeekerManager implements JobSeekerService {
 	private VerificationCodeService verificationCodeService;
 	private MernisDemoService mernisDemoService;
 	private FakeEmailVerificationService fakeEmailVerificationService;
+	private JobSeekerCheckService jobSeekerCheckService;
 
+	@Autowired
 	public JobSeekerManager(JobSeekerDao jobSeekerDao, UserDao userDao, VerificationCodeService verificationCodeService,
-			MernisDemoService mernisDemoService, FakeEmailVerificationService fakeEmailVerificationService) {
+			MernisDemoService mernisDemoService, FakeEmailVerificationService fakeEmailVerificationService,
+			JobSeekerCheckService jobSeekerCheckService) {
 		super();
 		this.jobSeekerDao = jobSeekerDao;
 		this.userDao = userDao;
 		this.verificationCodeService = verificationCodeService;
 		this.mernisDemoService = mernisDemoService;
 		this.fakeEmailVerificationService = fakeEmailVerificationService;
+		this.jobSeekerCheckService = jobSeekerCheckService;
 	}
 
 	@Override
@@ -43,34 +49,46 @@ public class JobSeekerManager implements JobSeekerService {
 
 	@Override
 	public Result add(JobSeeker jobSeeker) {
-
-		if (Strings.isNullOrEmpty(jobSeeker.getFirstName())) {
-			return new ErrorResult("Lütfen İsminizi Boş Geçmeyiniz");
-		}
-
-		else if (Strings.isNullOrEmpty(jobSeeker.getLastName())) {
-			return new ErrorResult("Lütfen Soyisminizi Boş Geçmeyiniz");
-		}
-
-		else if (jobSeeker.getDateOfBirth() <= 0) { // Düzenleme yapılacak
-			return new ErrorResult("Lütfen dogum yilini Boş Geçmeyiniz");
-		}
-
-		else if (jobSeeker.getEmail() == null) {
-			return new ErrorResult("Lütfen email adresinizi Boş Geçmeyiniz");
-		}
-
-		else if (jobSeeker.getPassword().length() <= 6) {
-			return new ErrorResult("Lütfen sifrenizi 6 karakterden az girmeyiniz");
-		} else if (!mernisDemoService.isValidNationolityIdentity(jobSeeker.getIdentificationNumber())) {
-			return new ErrorResult("TC Kimlik dogrulamasi yapilamadi");
-		} else if (getByEmail(jobSeeker.getEmail()).getData() != null) {
+		// System.out.println("Burda3");
+		// if (jobSeekerCheckService.CheckIfRealJobSeeker(jobSeeker))
+		// {
+		// return new ErrorResult("TC Kimlik dogrulamasi yapilamadi");
+		// }
+		// System.out.println("Burda4");
+		/*
+		 * if (Strings.isNullOrEmpty(jobSeeker.getFirstName())) { return new
+		 * ErrorResult("Lütfen İsminizi Boş Geçmeyiniz"); }
+		 * 
+		 * else if (Strings.isNullOrEmpty(jobSeeker.getLastName())) { return new
+		 * ErrorResult("Lütfen Soyisminizi Boş Geçmeyiniz"); }
+		 * 
+		 * else if (jobSeeker.getDateOfBirth() <= 0) { // Düzenleme yapılacak return new
+		 * ErrorResult("Lütfen dogum yilini Boş Geçmeyiniz"); }
+		 * 
+		 * else if (jobSeeker.getEmail() == null) { return new
+		 * ErrorResult("Lütfen email adresinizi Boş Geçmeyiniz"); }
+		 * 
+		 * else if (jobSeeker.getPassword().length() <= 6) { return new
+		 * ErrorResult("Lütfen sifrenizi 6 karakterden az girmeyiniz"); }
+		 */
+		// else if
+		// (!mernisDemoService.isValidNationolityIdentity(jobSeeker.getIdentificationNumber()))
+		// else if (jobSeekerCheckService.CheckIfRealPerson(jobSeeker))
+		// {
+		// return new ErrorResult("TC Kimlik dogrulamasi yapilamadi");
+		// }
+		// else
+		if (getByEmail(jobSeeker.getEmail()).getData() != null) {
 			return new ErrorResult(jobSeeker.getEmail() + " E-Posta Adresinden Daha Önceden Bir Kayıt Var.");
 		} else if (getByIdentificationNumber(jobSeeker.getIdentificationNumber()).getData() != null) {
 			return new ErrorResult(jobSeeker.getIdentificationNumber() + " Tc No dan Daha Önceden Bir Kayıt Var.");
 		} else if (isEmailValid(jobSeeker.getEmail())) {
 
-			
+			// new SuccessResult(jobSeeker.getEmail() + " Adresine doğrulama kodu
+			// gönderildi");
+			// Düzenleme yapılacak.
+
+			// jobSeeker.setMailVerify(false);
 
 			if (fakeEmailVerificationService.emailVerification(jobSeeker.getEmail())) {
 				User savedUser = this.userDao.save(jobSeeker);
