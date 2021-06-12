@@ -19,6 +19,8 @@ public class ResumeGetDto {
 	@JsonProperty(access = Access.READ_ONLY)
 	private int id;
 	private int jobSeekerId;
+	private String jobSeekerFirstName;
+	private String jobSeekerLastName;
 	private String photo;
 	private String coverLetter;
 	private String githubAddress;
