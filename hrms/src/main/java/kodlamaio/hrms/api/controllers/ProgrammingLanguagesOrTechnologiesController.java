@@ -1,6 +1,7 @@
 package kodlamaio.hrms.api.controllers;
 
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ public class ProgrammingLanguagesOrTechnologiesController {
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody ProgrammingLanguagesOrTechnologie programmingLanguagesOrTechnologie) {
+	public Result add(@Valid @RequestBody ProgrammingLanguagesOrTechnologie programmingLanguagesOrTechnologie) {
 		return this.programmingLanguagesOrTechnologieService.add(programmingLanguagesOrTechnologie);
 	}
 

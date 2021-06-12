@@ -14,8 +14,9 @@ public class WorkExperienceDto {
 	private int id;
 	private String firstName;
 	private String lastName;
-	private String jobPosition;
+	private int jobPositionId;
 	private String companyName;
 	private LocalDate startedDate;
 	private LocalDate endedDate;
+	private int resumeId;
 }

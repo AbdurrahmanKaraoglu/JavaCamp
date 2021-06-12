@@ -6,11 +6,7 @@ import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.entities.concretes.JobSeeker;
 
 public interface JobSeekerService {
-	DataResult<List<JobSeeker>> getAll();
-
 	Result add(JobSeeker jobSeeker);
 
-	DataResult<JobSeeker> getByIdentificationNumber(String identificationNumber);
-
-	DataResult<JobSeeker> getByEmail(String email);
+	DataResult<List<JobSeeker>> getAll();
 }

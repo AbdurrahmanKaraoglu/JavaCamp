@@ -3,17 +3,14 @@ package kodlamaio.hrms.entities.concretes;
 import java.time.LocalDate;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.constraints.NotBlank;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.sun.istack.NotNull;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,25 +20,33 @@ import lombok.NoArgsConstructor;
 @Table(name = "verification_codes")
 @AllArgsConstructor
 @NoArgsConstructor
-@Inheritance(strategy = InheritanceType.JOINED)
-
 public class VerificationCode {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
+	@JsonIgnore
 	private int id;
 
+	@JsonIgnore
 	@Column(name = "code")
-	@NotBlank(message="Boş Geçilemez")
-	@NotNull
-	private String code;
+	private String verifyCode;
 
-	@Column(name = "is_verified")
-	@NotBlank(message="Boş Geçilemez")
-	@NotNull
-	private boolean isVerified;
+	@JsonIgnore
+	@Column(name = "is_confirmed")
+	private boolean isConfirmed;
 
-	@Column(name = "verified_date")
-	@JsonFormat(pattern = "yyyy-MM-dd")
-	private LocalDate verifiedDate;
+	@JsonIgnore
+	@Column(name = "created_date")
+	private LocalDate createdDate;
+
+	@ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+	@JsonIgnore
+	private User userId;
+
+	@JsonIgnore
+	@Column(name = "confirmed_date")
+	private LocalDate confirmedDate;
+
 }

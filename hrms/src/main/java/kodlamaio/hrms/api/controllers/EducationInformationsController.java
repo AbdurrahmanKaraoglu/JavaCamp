@@ -1,6 +1,7 @@
 package kodlamaio.hrms.api.controllers;
 
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import kodlamaio.hrms.business.abstracts.EducationInformationService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
-import kodlamaio.hrms.entities.concretes.EducationInformation;
 import kodlamaio.hrms.entities.dtos.EducationInformationDto;
 
 @RestController
@@ -25,19 +25,18 @@ public class EducationInformationsController {
 		this.educationInformationService = educationInformationService;
 	}
 
-	@GetMapping("/getEducationInformationEndedDateDesc")
-	public DataResult<List<EducationInformationDto>> getEducationInformationEndedDateDesc(
-			@RequestParam int jobSeekerId) {
-		return this.educationInformationService.getEducationInformationEndedDateDesc(jobSeekerId);
+	@GetMapping("/getAllByResumeIdOrderByEndedDateDesc")
+	public DataResult<List<EducationInformationDto>> getAllByResumeIdOrderByEndedDateDesc(@RequestParam int resumeId) {
+		return this.educationInformationService.getAllByResumeIdOrderByEndedDateDesc(resumeId);
 	}
 
 	@PostMapping("/add")
-	public Result add(@RequestBody EducationInformation educationInformation) {
-		return this.educationInformationService.add(educationInformation);
+	public Result add(@Valid @RequestBody EducationInformationDto educationInformationDto) {
+		return this.educationInformationService.add(educationInformationDto);
 	}
 
 	@GetMapping("/getAll")
-	public DataResult<List<EducationInformation>> getAll() {
+	public DataResult<List<EducationInformationDto>> getAll() {
 		return this.educationInformationService.getAll();
 	}
 }

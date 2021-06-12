@@ -20,13 +20,16 @@ public class CloudinaryManager implements CloudinaryService {
 		this.cloudinary = cloudinary;
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public DataResult<?> save(MultipartFile file) {
 		try {
 			Map cloudinaryUploader = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
 			return new SuccessDataResult<Map>(cloudinaryUploader);
-		} catch (IOException e) {
+		}
 
+		catch (IOException e) {
+			e.printStackTrace();
 		}
 		return new ErrorDataResult<Map>();
 	}

@@ -2,16 +2,12 @@ package kodlamaio.hrms.entities.dtos;
 
 import java.time.LocalDate;
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import kodlamaio.hrms.entities.concretes.EducationInformation;
 import kodlamaio.hrms.entities.concretes.ForeignLanguageKnowledge;
-import kodlamaio.hrms.entities.concretes.JobSeeker;
 import kodlamaio.hrms.entities.concretes.ProgrammingLanguagesOrTechnologie;
 import kodlamaio.hrms.entities.concretes.WorkExperience;
-import kodlamaio.hrms.entities.dtos.ResumeDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,10 +15,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResumeDto {
-	@JsonIgnore
+public class ResumeGetDto {
+	@JsonProperty(access = Access.READ_ONLY)
 	private int id;
-	private JobSeeker jobSeeker;
+	private int jobSeekerId;
 	private String photo;
 	private String coverLetter;
 	private String githubAddress;

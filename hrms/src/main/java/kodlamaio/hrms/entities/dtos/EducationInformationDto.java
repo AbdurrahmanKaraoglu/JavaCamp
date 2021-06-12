@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 public class EducationInformationDto {
 	@JsonIgnore
 	private int id;
-	private String firstName;
-	private String lastName;
+	private String jobSeekerFirstName;
+	private String jobSeekerLastName;
 	private int resumeId;
 	private String schoolName;
 	private String schoolDepartment;

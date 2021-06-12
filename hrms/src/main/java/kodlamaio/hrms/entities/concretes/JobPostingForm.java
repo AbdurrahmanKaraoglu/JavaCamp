@@ -11,15 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
-
-import com.sun.istack.NotNull;
-
-import kodlamaio.hrms.entities.concretes.Citie;
-import kodlamaio.hrms.entities.concretes.Employer;
-import kodlamaio.hrms.entities.concretes.JobPosition;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,19 +28,9 @@ public class JobPostingForm {
 	@Column(name = "id")
 	private int id;
 
-	// @Column(name = "employer_id")
-	// private int employerId;
-
-	// @Column(name = "job_position_id")
-	// private int jobPositionId;
-
 	@Column(name = "job_description")
-	@NotBlank(message="İş Açıklaması Boş Geçilemez")
-	@NotNull
+	@NotBlank(message = "İş Açıklaması Boş Geçilemez")
 	private String jobDescription;
-
-	// @Column(name = "city_id")
-	// private int cityId;
 
 	@Column(name = "minimum_salary")
 	private int minimumSalary;
@@ -57,37 +39,33 @@ public class JobPostingForm {
 	private int maximumSalary;
 
 	@Column(name = "number_of_open_positions")
-	@NotBlank(message="Açık Pozisyon Sayısı Boş Geçilemez")
-	@NotNull
+	@NotBlank(message = "Açık Pozisyon Sayısı Boş Geçilemez")
 	private int numberOfOpenPositions;
 
 	@Column(name = "release_date")
-	@NotBlank(message="Yayınlama Tarihi Boş Geçilemez")
-	@NotNull
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@NotBlank(message = "Yayınlama Tarihi Boş Geçilemez")
 	private LocalDate releaseDate;
 
 	@Column(name = "application_deadline")
-	@NotBlank(message="Son Başvuru Tarihi Boş Geçilemez")
-	@NotNull
+	@NotBlank(message = "Son Başvuru Tarihi Boş Geçilemez")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate applicationDeadline;
 
 	@Column(name = "active")
-	//@NotBlank(message="Boş Geçilemez")
-	//@NotNull
-	private boolean formActive;
+	private boolean isActive;
 
-	@ManyToOne(targetEntity = Employer.class ,fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "employer_id" , referencedColumnName =  "id" ,nullable = false)
+	@ManyToOne(targetEntity = Employer.class, fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "employer_id", referencedColumnName = "id", nullable = false)
 	private Employer employer;
 
-	@ManyToOne(targetEntity = Citie.class ,fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "city_id",referencedColumnName =  "id" ,nullable = false)
+	@ManyToOne(targetEntity = Citie.class, fetch = FetchType.LAZY, optional = false)
+	@NotBlank(message = "Şehir Boş Geçilemez")
+	@JoinColumn(name = "city_id", referencedColumnName = "id", nullable = false)
 	private Citie citie;
 
-	@ManyToOne(targetEntity = JobPosition.class ,fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "job_position_id",referencedColumnName =  "id" ,nullable = false)
+	@ManyToOne(targetEntity = JobPosition.class, fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "job_position_id", referencedColumnName = "id", nullable = false)
+	@NotBlank(message = "İş Pozisyonu Boş Geçilemez")
 	private JobPosition jobPosition;
 
 }

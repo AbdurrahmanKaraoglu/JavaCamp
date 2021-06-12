@@ -8,7 +8,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.NotNull;
-import kodlamaio.hrms.entities.abstracts.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,6 +33,6 @@ public class Employee extends User {
 
 	@OneToMany(mappedBy = "employee")
 	@JsonIgnore
-	private List<EmployeeConfirm> employeeConfirms;
+	private List<ConfirmEmployer> employeeConfirms;
 
 }

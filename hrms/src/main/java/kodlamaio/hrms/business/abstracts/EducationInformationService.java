@@ -1,16 +1,14 @@
 package kodlamaio.hrms.business.abstracts;
 
 import java.util.List;
-
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
-import kodlamaio.hrms.entities.concretes.EducationInformation;
 import kodlamaio.hrms.entities.dtos.EducationInformationDto;
 
 public interface EducationInformationService {
-	Result add(EducationInformation educationInformation);
+	Result add(EducationInformationDto educationInformationDto);
 
-	DataResult<List<EducationInformation>> getAll();
+	DataResult<List<EducationInformationDto>> getAll();
 
-	DataResult<List<EducationInformationDto>> getEducationInformationEndedDateDesc(int jobSeekerId);
+	DataResult<List<EducationInformationDto>> getAllByResumeIdOrderByEndedDateDesc(int resumeId);
 }

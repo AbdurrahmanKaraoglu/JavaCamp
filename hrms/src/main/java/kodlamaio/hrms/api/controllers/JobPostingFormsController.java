@@ -1,7 +1,7 @@
 package kodlamaio.hrms.api.controllers;
 
 import java.util.List;
-import javax.transaction.Transactional;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,7 +13,8 @@ import kodlamaio.hrms.business.abstracts.JobPostingFormService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
 import kodlamaio.hrms.core.utilities.results.Result;
 import kodlamaio.hrms.entities.concretes.JobPostingForm;
-import kodlamaio.hrms.entities.dtos.JobPostingFormWithEmployerWithJobPositionDto;
+import kodlamaio.hrms.entities.dtos.JobPostingFormDto;
+import kodlamaio.hrms.entities.dtos.JobPostingFormGetDto;
 
 @RestController
 @RequestMapping("/api/jobpostingforms")
@@ -27,41 +28,38 @@ public class JobPostingFormsController {
 		this.jobPostingFormService = jobPostingFormService;
 	}
 
-	@GetMapping("/getall")
-	public DataResult<List<JobPostingForm>> getAll() {
-		return this.jobPostingFormService.getAll();
-	}
-
 	@PostMapping("/add")
-	public Result add(@RequestBody JobPostingForm jobPostingForm) {
+	public Result add(@Valid @RequestBody JobPostingForm jobPostingForm) {
 		return this.jobPostingFormService.add(jobPostingForm);
 	}
 
-	@GetMapping("/getByFormActiveTrue")
-	public DataResult<List<JobPostingFormWithEmployerWithJobPositionDto>> getByFormActiveTrue() {
-		return this.jobPostingFormService.getByFormActiveTrue();
+	@GetMapping("/getAll")
+	public DataResult<List<JobPostingFormGetDto>> getAll() {
+		return this.jobPostingFormService.getAll();
 	}
 
-	@GetMapping("/getPostingFormWithEmployerWithJobPositionDetails")
-	public DataResult<List<JobPostingFormWithEmployerWithJobPositionDto>> getPostingFormWithEmployerWithJobPositionDetails() {
-		return this.jobPostingFormService.getPostingFormWithEmployerWithJobPositionDetails();
+	@GetMapping("/getByIsActive")
+	public DataResult<List<JobPostingFormDto>> getByIsActive() {
+		return this.jobPostingFormService.getByIsActive();
 	}
 
-	@GetMapping("/getAllByActiveTrueOrderByReleaseDateAsc")
-	public DataResult<List<JobPostingFormWithEmployerWithJobPositionDto>> getAllByFormActiveTrueOrderByReleaseDateAsc() {
-		return this.jobPostingFormService.getAllByFormActiveTrueOrderByReleaseDateAsc();
+	@GetMapping("/getByIsActiveOrderByReleaseDate")
+	public DataResult<List<JobPostingFormDto>> getByIsActiveOrderByReleaseDate() {
+		return this.jobPostingFormService.getByIsActiveOrderByReleaseDate();
 	}
 
-	@GetMapping("/getAllByEmployer_IdAndActiveTrue")
-	public DataResult<List<JobPostingFormWithEmployerWithJobPositionDto>> getAllByEmployer_IdAndActiveTrue(
-			@RequestParam int employer_id) {
-		return this.jobPostingFormService.getAllByEmployer_IdAndFormActiveTrue(employer_id);
+	@GetMapping("/getByIsActiveAndEmployerCompanyName")
+	public DataResult<List<JobPostingFormDto>> getByIsActiveAndEmployer_CompanyName(@RequestParam String companyName) {
+		return this.jobPostingFormService.getByIsActiveAndEmployer_CompanyName(companyName);
 	}
 
-	@PostMapping("/disableJobPosting")
-	@Transactional
-	public Result updateJobPostingFormSetformActiveEmployer_id(int jobPostingForm_id, int employer_id) {
-		return this.jobPostingFormService.updateJobPostingFormSetformActiveEmployer_id(jobPostingForm_id, employer_id);
-	}
+	/*
+	 * @PostMapping("/disableJobPosting")
+	 * 
+	 * @Transactional public Result updateJobPostingFormSetIsActiveEmployer_id(int
+	 * jobPostingForm_id, int employer_id) { return
+	 * this.jobPostingFormService.updateJobPostingFormSetIsActiveEmployer_id(
+	 * jobPostingForm_id, employer_id); }
+	 */
 
 }

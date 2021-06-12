@@ -1,52 +1,33 @@
 package kodlamaio.hrms.business.concretes;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import kodlamaio.hrms.business.abstracts.JobPositionService;
+import kodlamaio.hrms.business.abstracts.VerificationService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
-import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
-import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
-import kodlamaio.hrms.core.utilities.results.SuccessResult;
-import kodlamaio.hrms.dataAccess.abstracts.JobPositionDao;
 import kodlamaio.hrms.entities.concretes.JobPosition;
 
 @Service
 public class JobPositionManager implements JobPositionService {
 
-	private JobPositionDao jobPositionDao;
+	private VerificationService<JobPosition> verificationService;
 
 	@Autowired
-	public JobPositionManager(JobPositionDao jobPositionDao) {
+	public JobPositionManager(VerificationService<JobPosition> verificationService) {
 		super();
-		this.jobPositionDao = jobPositionDao;
-	}
-
-	@Override
-	public DataResult<List<JobPosition>> getAll() {
-		return new SuccessDataResult<List<JobPosition>>(this.jobPositionDao.findAll(), "Data Listelendi");
+		this.verificationService = verificationService;
 	}
 
 	@Override
 	public Result add(JobPosition jobPosition) {
-		String title = jobPosition.getTitle();
-		if (title.equals("")) {
-			return new ErrorResult("İş Pozisyonu Boş Girilemez.");
-		} else if (getByTitle(jobPosition.getTitle()).getData() != null) {
-			return new ErrorResult(jobPosition.getTitle() + " İş Pozisyonundan Daha Önceden Bir Kayıt Var.");
-		} else {
-			this.jobPositionDao.save(jobPosition);
-			return new SuccessResult("İş Pozisyonu Eklendi");
-		}
-
+		return verificationService.verifyData(jobPosition);
 	}
 
 	@Override
-	public DataResult<JobPosition> getByTitle(String title) {
-		return new SuccessDataResult<JobPosition>(this.jobPositionDao.getByTitle(title), "Data listelendi");
+	public DataResult<List<JobPosition>> getAll() {
+		return verificationService.getAll();
 	}
 
 }

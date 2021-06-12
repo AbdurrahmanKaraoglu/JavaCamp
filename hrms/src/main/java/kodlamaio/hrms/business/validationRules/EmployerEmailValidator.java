@@ -1,9 +1,10 @@
-package kodlamaio.hrms.core.validations;
+package kodlamaio.hrms.business.validationRules;
 
+import org.springframework.stereotype.Service;
 import kodlamaio.hrms.entities.concretes.Employer;
 
-public class EmployerValidator {
-
+@Service
+public class EmployerEmailValidator {
 	public static boolean EmployerDomainCheck(Employer employer) {
 
 		String[] dizi = employer.getEmail().split("@");
@@ -17,5 +18,4 @@ public class EmployerValidator {
 		else
 			return false;
 	}
-
 }

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import kodlamaio.hrms.business.abstracts.CitieService;
 import kodlamaio.hrms.core.utilities.results.DataResult;
-import kodlamaio.hrms.entities.concretes.Citie;
 import kodlamaio.hrms.core.utilities.results.Result;
+import kodlamaio.hrms.entities.concretes.Citie;
 
 @RestController
 @RequestMapping("/api/cities")
@@ -28,7 +28,7 @@ public class CitiesController {
 	public DataResult<List<Citie>> getAll() {
 		return this.citieService.getAll();
 	}
-	
+
 	@PostMapping("/add")
 	public Result add(@RequestBody Citie citie) {
 		return this.citieService.add(citie);

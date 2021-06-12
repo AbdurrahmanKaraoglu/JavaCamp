@@ -5,10 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-
-import com.sun.istack.NotNull;
-
-import kodlamaio.hrms.entities.abstracts.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,29 +17,37 @@ import lombok.NoArgsConstructor;
 @Table(name = "candidates")
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class JobSeeker extends User {
 
-	@Column(name = "first_name")
 	@NotBlank(message = "İsim Alanı Boş olamaz")
 	@Size(min = 3, message = "İsim alanında en az 3 karakter kullanmanız gerekiyor")
-	@NotNull
+	@Column(name = "first_name")
 	private String firstName;
 
-	@Column(name = "last_name")
 	@NotBlank(message = "Soyisim Alanı Boş olamaz")
-	@NotNull
+	@Column(name = "last_name")
 	private String lastName;
 
-	@Column(name = "identity_number")
 	@NotBlank(message = "TC Kimlik Numarası Alanı Boş Olamaz")
 	@Size(min = 11, max = 11, message = "TC Kimlik Numaranızı 11 Haneli Giriniz")
-	@NotNull
+	@Column(name = "identity_number")
 	private String identificationNumber;
 
-	@Column(name = "birth_year")
 	@NotBlank(message = "Doğum Yılı Boş Geçilemez")
+	@Column(name = "birth_year")
 	@Size(min = 4, max = 4, message = "Doğum Yılınızı Giriniz")
-	@NotNull
-	private int dateOfBirth;
+	private String dateOfBirth;
+
+	/*
+	 * public JobSeeker(int id, String email, String password, String firstName,
+	 * String lastName, String identificationNumber, int dateOfBirth) { super(id,
+	 * email, password); this.firstName = firstName; this.lastName = lastName;
+	 * this.identificationNumber = identificationNumber; this.dateOfBirth =
+	 * dateOfBirth; }
+	 */
+	// @OneToMany(mappedBy = "jobSeeker")
+	// @JsonIgnore
+	// private List<Resume> resumes;
 
 }

@@ -1,6 +1,7 @@
 package kodlamaio.hrms.api.controllers;
 
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,23 +25,13 @@ public class JobSeekersController {
 		this.jobSeekerService = jobSeekerService;
 	}
 
-	@GetMapping("/getall")
-	public DataResult<List<JobSeeker>> getAll() {
-		return this.jobSeekerService.getAll();
-	}
-
-	@PostMapping("/add")
-	public Result add(@RequestBody JobSeeker jobSeeker) {
+	@PostMapping("/add") // 3 -- Veri eklemek için
+	public Result add(@Valid @RequestBody JobSeeker jobSeeker) {
 		return this.jobSeekerService.add(jobSeeker);
 	}
 
-	@GetMapping("/getByIdentificationNumber")
-	public DataResult<JobSeeker> getByIdentificationNumber(String identificationNumber) {
-		return this.jobSeekerService.getByIdentificationNumber(identificationNumber);
-	}
-
-	@GetMapping("/getByEmail")
-	public DataResult<JobSeeker> getByEmail(String email) {
-		return this.jobSeekerService.getByEmail(email);
+	@GetMapping("/getall") // 3 -- Tüm verileri listelemek için
+	public DataResult<List<JobSeeker>> getAll() {
+		return this.jobSeekerService.getAll();
 	}
 }

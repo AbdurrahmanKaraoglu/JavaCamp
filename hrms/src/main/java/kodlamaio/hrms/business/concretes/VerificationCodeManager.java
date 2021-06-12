@@ -1,73 +1,67 @@
 package kodlamaio.hrms.business.concretes;
 
-import java.security.SecureRandom;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import kodlamaio.hrms.business.abstracts.VerificationCodeService;
-import kodlamaio.hrms.core.utilities.results.DataResult;
+import kodlamaio.hrms.core.utilities.results.ErrorResult;
 import kodlamaio.hrms.core.utilities.results.Result;
-import kodlamaio.hrms.core.utilities.results.SuccessDataResult;
 import kodlamaio.hrms.core.utilities.results.SuccessResult;
+import kodlamaio.hrms.dataAccess.abstracts.UserDao;
 import kodlamaio.hrms.dataAccess.abstracts.VerificationCodeDao;
-import kodlamaio.hrms.entities.abstracts.User;
+import kodlamaio.hrms.entities.concretes.User;
 import kodlamaio.hrms.entities.concretes.VerificationCode;
 
 @Service
 public class VerificationCodeManager implements VerificationCodeService {
-
 	private VerificationCodeDao verificationCodeDao;
+	private UserDao userDao;
 
 	@Autowired
-	public VerificationCodeManager(VerificationCodeDao verificationCodeDao) {
+	public VerificationCodeManager(VerificationCodeDao verificationCodeDao, UserDao userDao) {
 		super();
 		this.verificationCodeDao = verificationCodeDao;
-
+		this.userDao = userDao;
 	}
 
 	@Override
-	public DataResult<List<VerificationCode>> getAll() {
-		return new SuccessDataResult<List<VerificationCode>>(this.verificationCodeDao.findAll(), "Data Listelendi");
+	public String createVerifyCode(User user) {
+		String randomCode = UUID.randomUUID().toString();
+		// System.out.println("Kod : " + randomCode);
+		VerificationCode Code = new VerificationCode();
+		Code.setUserId(user);
+		Code.setCreatedDate(LocalDate.now());
+		Code.setVerifyCode(UUID.randomUUID().toString());
+		this.verificationCodeDao.save(Code);
+
+		return randomCode;
 	}
 
 	@Override
-	public Result add(VerificationCode verificationCode) {
-		this.verificationCodeDao.save(verificationCode);
-		return new SuccessResult("Doğrolama Kodu Eklendi");
+	public void sendMail(String mail) {
+
+		System.out.println("E-Posta Adresinize Doğrulama Maili Gönderildi : " + mail);
 	}
 
-	String generatedCode = "";
-
+	@SuppressWarnings("deprecation")
 	@Override
-	public String createActivationCode(User user) {
-		for (int i = 0; i == 0; i = 0) {
-			generatedCode = randomCodeGenarator(20);
-			if (findByCode(generatedCode) == null) {
-				break;
-			}
+	public Result verifyUser(String code) {
+		if (!this.verificationCodeDao.existsByVerifyCode(code)) {
+			return new ErrorResult("Hatalı Doğrulama İşlemi");
 		}
-		VerificationCode verificationCode = new VerificationCode();
-		verificationCode.setId(user.getId());
-		verificationCode.setCode(generatedCode);
-		verificationCodeDao.save(verificationCode);
-		return generatedCode;
-
-	}
-
-	@Override
-	public VerificationCode findByCode(String code) {
-		return this.verificationCodeDao.findByCode(code);
-	}
-
-	private final String whatsUp = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	private SecureRandom mixer = new SecureRandom();
-
-	private String randomCodeGenarator(int lenght) {
-		StringBuilder randomValueConstructor = new StringBuilder(lenght);
-		for (int i = 0; i < lenght; i++) {
-			randomValueConstructor.append(whatsUp.charAt(mixer.nextInt(whatsUp.length())));
+		VerificationCode newVerificationCode = verificationCodeDao.getByVerifyCode(code);
+		if (this.verificationCodeDao.getOne(newVerificationCode.getId()).isConfirmed()) {
+			return new ErrorResult("Doğrulama işlemi daha önce yapıldı");
 		}
-		return randomValueConstructor.toString();
-	}
+		newVerificationCode.setConfirmed(true);
+		newVerificationCode.setConfirmedDate(LocalDate.now());
+		verificationCodeDao.save(newVerificationCode);
+		User verificationUser = new User();
+		verificationUser = userDao.getOne(newVerificationCode.getUserId().getId());
+		verificationUser.setVerify(true);
+		userDao.save(verificationUser);
+		return new SuccessResult("Doğrulama Başarılı");
 
+	}
 }
